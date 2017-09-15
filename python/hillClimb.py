@@ -18,7 +18,6 @@ def miteBasicHillClimb(startMite, neighborFunc = getNeighbors, scoreFunc = oneTh
             return curMite
 
         else:
-            print bestMite
             print "Cur best score: " + str(scores[bestMite,0])
             curMite = np.copy(neighbors[bestMite-1, :])
 

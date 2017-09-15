@@ -45,6 +45,12 @@ def basicFight(mite1, mite2):
     return basicScoring(rounds, c1, c2)
 
 
+# This function will take in a mite and a population and return the average score of that mite battled against the population
+def populationFight(mite, population, scoreFunc = basicScoring):
+    raise NotImplementedError('Not yet populationFight')
+    return -1
+
+
 # This function will take in a population (where each row is a mite) and return a column of scores for each mite
 # These scores are found by round robin style battling each mite and using the scoring function provided as a parameter
 def roundRobinScore(population, scoreFunc = basicScoring):
@@ -67,7 +73,7 @@ def roundRobinScore(population, scoreFunc = basicScoring):
 
 
 # This function will take in a population (where each row is a mite) and return a column of scores for each mite
-# These scores are found by summing the scores of each mite battled with a ones mite and a threes mite
+# These scores are found by averaging the scores of each mite battled with a ones mite and a threes mite
 def oneThreeScoring(population):
     ones = np.ones((1, 50))
     threes = np.ones((1, 50)) * 3
@@ -78,9 +84,16 @@ def oneThreeScoring(population):
     for i in range(numMites):
         score1, _ = basicFight(population[i, :], ones)
         score3, _ = basicFight(population[i, :], threes)
-        scores[i] = score1 + score3
+        scores[i] = (score1 + score3)/2.0
 
     return scores
+
+
+# This function will take in a population (where each row is a mite) and return a column of scores for each mite
+# These scores are found by averaging the scores of each mite battled with the set of saved mites from a file
+def fromFileScoring(population):
+    raise NotImplementedError('Not yet implemented fromFileScoring')
+    return -1
 
 def main():
     ones = np.ones((1,50))
