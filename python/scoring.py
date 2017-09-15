@@ -1,3 +1,7 @@
+import numpy as np
+import _PyPacwar
+
+
 # This function takes the number of rounds and final counts of the mites after a pacwar battle
 # The output is the score from the given scoring method given as a tuple
 def basicScoring(rounds,c1,c2):
@@ -33,3 +37,24 @@ def basicScoring(rounds,c1,c2):
         return 9, 11
     else:
         return 10, 10
+
+
+# This function will take in a population (where each row is a mite) and return a column of scores for each mite
+# These scores are found by round robin style battling each mite and using the scoring function provided as a parameter
+def roundRobinScore(population, scoreFunc = basicScoring):
+    numMites = population.size()[0]
+    scores = np.zeros((numMites, 1))
+
+    for i in range(numMites):
+        iMite = population[i, :]
+
+        for j in range(i+1, numMites):
+            jMite = population[j, :]
+
+            (rounds, c1, c2) = _PyPacwar.battle(list(iMite), list(jMite))
+            iScore, jScore = scoreFunc(rounds, c1, c2)
+
+            scores[i, 1] += iScore
+            scores[j, 1] += jScore
+
+    return scores
