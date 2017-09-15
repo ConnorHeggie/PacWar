@@ -39,13 +39,19 @@ def basicScoring(rounds,c1,c2):
         return 10, 10
 
 
+# This function will take in two mites and return the scores of each found from a battle and basic score
+def basicFight(mite1, mite2):
+    (rounds, c1, c2) = _PyPacwar.battle(list(mite1), list(mite2))
+    return basicScoring(rounds, c1, c2)
+
+
 # This function will take in a population (where each row is a mite) and return a column of scores for each mite
 # These scores are found by round robin style battling each mite and using the scoring function provided as a parameter
 def roundRobinScore(population, scoreFunc = basicScoring):
-    numMites = population.size()[0]
+    numMites = population.shape[0]
     scores = np.zeros((numMites, 1))
 
-    for i in range(numMites):
+    for i in range(numMites-1):
         iMite = population[i, :]
 
         for j in range(i+1, numMites):
@@ -54,7 +60,36 @@ def roundRobinScore(population, scoreFunc = basicScoring):
             (rounds, c1, c2) = _PyPacwar.battle(list(iMite), list(jMite))
             iScore, jScore = scoreFunc(rounds, c1, c2)
 
-            scores[i, 1] += iScore
-            scores[j, 1] += jScore
+            scores[i, 0] += iScore
+            scores[j, 0] += jScore
 
     return scores
+
+
+# This function will take in a population (where each row is a mite) and return a column of scores for each mite
+# These scores are found by summing the scores of each mite battled with a ones mite and a threes mite
+def oneThreeScoring(population):
+    ones = np.ones((1, 50))
+    threes = np.ones((1, 50)) * 3
+
+    numMites = population.shape[0]
+    scores = np.zeros((numMites, 1))
+
+    for i in range(numMites):
+        score1, _ = basicFight(population[i, :], ones)
+        score3, _ = basicFight(population[i, :], threes)
+        scores[i] = score1 + score3
+
+    return scores
+
+def main():
+    ones = np.ones((1,50))
+    twos = np.ones((1,50)) * 2
+    threes = np.ones((1, 50)) * 3
+
+    scores = roundRobinScore(np.vstack((ones,twos,threes)))
+
+    print "Round robin scoring of ones, twos, and threes produced: \n" + str(scores)
+
+
+if __name__ == "__main__": main()
