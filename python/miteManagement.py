@@ -1,12 +1,20 @@
 import numpy as np
 
-# This function with generate a uniformly random mite (takes a seed)
+# This function will generate a uniformly random mite (takes a seed)
 def uniformRandMite(seed = None):
     if seed != None:
         np.random.seed(seed)
 
     return np.random.randint(0, 3, size=(1,50), dtype=np.int8)
 
+# This function will generate a population of uniformly random mites (takes a seed)
+def uniformRandPop(popSize, seed = None):
+    pop = np.zeros((0, 50))
+
+    for i in range(popSize):
+        pop = np.vstack((pop, uniformRandMite(seed)))
+
+    return pop
 
 # This function will take in a population matrix (each row being a mite)
 # and will return the mean hamming distance of the population
