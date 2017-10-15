@@ -6,7 +6,7 @@ from miteManagement import uniformRandMite, getNeighbors
 # This function will take in a mite, a function to get neighbors, and a scoring function
 # It will perform hill climbing and return the locally optimum mite (all neighbors are worse scores)
 def miteBasicHillClimb(startMite, neighborFunc = getNeighbors, scoreFunc = oneThreeScoring):
-    curMite = np.copy(startMite)
+    curMite = np.copy(np.reshape(startMite, (1, 50)))
     while 1:
         neighbors = neighborFunc(curMite)
         scores = scoreFunc(np.vstack((curMite, neighbors)))
