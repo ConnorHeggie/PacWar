@@ -45,10 +45,16 @@ def basicFight(mite1, mite2):
     return basicScoring(rounds, c1, c2)
 
 
-# This function will take in a mite and a population and return the average score of that mite battled against the population
+# This function will take in a mite and a population
+# and return the average score of that mite battled against the population
 def populationFight(mite, population, scoreFunc = basicScoring):
-    raise NotImplementedError('Not yet populationFight')
-    return -1
+    numMites = population.shape[0]
+    scoresSum = 0
+
+    for i in range(numMites):
+        scoresSum += basicFight(mite, population[i,:])[0]
+
+    return float(scoresSum) / numMites
 
 
 # This function will take in a population (where each row is a mite) and return a column of scores for each mite
@@ -89,11 +95,25 @@ def oneThreeScoring(population):
     return scores
 
 
+# This function will take in a mite and return a score
+# This score is found by averaging the scores of the mite battled with the set of saved mites from a file
+def fromFileScoring(mite, savedMitesFile='savedPop.npy'):
+    savedPop = np.load(savedMitesFile)
+    return populationFight(mite, savedPop)
+
+
 # This function will take in a population (where each row is a mite) and return a column of scores for each mite
 # These scores are found by averaging the scores of each mite battled with the set of saved mites from a file
-def fromFileScoring(population):
-    raise NotImplementedError('Not yet implemented fromFileScoring')
-    return -1
+def fromFilePopScoring(population, savedMitesFile='savedPop.npy'):
+    numMites = population.shape[0]
+    scores = np.zeros((numMites, 1))
+
+    for i in range(numMites):
+        mite = population[i, :]
+        scores[i, 0] = fromFileScoring(mite, savedMitesFile)
+
+    return scores
+
 
 def main():
     ones = np.ones((1,50))
@@ -101,8 +121,10 @@ def main():
     threes = np.ones((1, 50)) * 3
 
     scores = roundRobinScore(np.vstack((ones,twos,threes)))
+    scores2 = populationFight(threes, np.vstack((ones,twos)))
 
     print "Round robin scoring of ones, twos, and threes produced: \n" + str(scores)
+    print "Population fight between threes and a pop of ones and twos produces: \n" + str(scores2)
 
 
 if __name__ == "__main__": main()

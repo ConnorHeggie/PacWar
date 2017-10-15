@@ -8,7 +8,8 @@ def uniformRandMite(seed = None):
     return np.random.randint(0, 3, size=(1,50), dtype=np.int8)
 
 
-# This function will take in a population matrix (each row being a mite) and will return the mean hamming distance of the population
+# This function will take in a population matrix (each row being a mite)
+# and will return the mean hamming distance of the population
 def findAvgHammingDist(population):
     raise NotImplementedError('Not yet implemented find average hamming distance')
     return -1
