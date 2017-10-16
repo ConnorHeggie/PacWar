@@ -1,6 +1,7 @@
 import numpy as np
-from miteManagement import uniformRandPop, getNeighbors
+from miteManagement import uniformRandPop
 from scoring import oneThreeScoring
+from hillClimb import hillClimbedPop
 
 # This function will take in 2 mites and randomly cross them over k times
 def basicCrossOver(mite1, mite2, k=1):
@@ -112,7 +113,7 @@ def genetic_algorithm(popSize=50, keepRate=.2, mutationFunc=basicPopMutation, nu
 
 
 def main():
-    pop = genetic_algorithm(numGen=200)
+    pop = genetic_algorithm(popSize=50, numGen=250, initPopFunc=hillClimbedPop)
 
     print(pop)
 
