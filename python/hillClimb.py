@@ -1,6 +1,6 @@
 import numpy as np
-from scoring import roundRobinScore, oneThreeScoring
-from miteManagement import uniformRandMite, getNeighbors
+from scoring import oneThreeScoring
+from miteManagement import getNeighbors
 
 
 # This function will take in a mite, a function to get neighbors, and a scoring function

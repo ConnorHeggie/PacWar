@@ -5,7 +5,7 @@ def uniformRandMite(seed = None):
     if seed != None:
         np.random.seed(seed)
 
-    return np.random.randint(0, 3, size=(1,50), dtype=np.int8)
+    return np.random.randint(0, 4, size=(1, 50), dtype=np.int8)
 
 # This function will generate a population of uniformly random mites (takes a seed)
 def uniformRandPop(popSize, seed = None):
