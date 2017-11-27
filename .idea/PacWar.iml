@@ -5,7 +5,7 @@
     <orderEntry type="jdk" jdkName="Python 2.7.13 (C:\Anaconda3\envs\ELEC440\python.exe)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="Assignment 1" />
-    <orderEntry type="module" module-name="pwr-diff-nn" />
+    <orderEntry type="module" module-name="Assignment 2" />
   </component>
   <component name="TestRunnerService">
     <option name="projectConfiguration" value="Nosetests" />
