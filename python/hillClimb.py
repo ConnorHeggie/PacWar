@@ -4,7 +4,7 @@ from miteManagement import uniformRandMite, getNeighbors, getGeneNeighbors
 
 # This function will generate a random mite and then run it through basic hill climbing with the provided
 # scoring function
-def hillClimbedMite(scoreFunc=fromFilePopScoring,seed=None):
+def hillClimbedMite(fileName="savedPop.npy",seed=None):
     return miteBasicHillClimb(uniformRandMite(seed), scoreFunc=scoreFunc)
 
 

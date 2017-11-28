@@ -16,11 +16,22 @@ mite1 = np.array(mite1)
 
 # print basicFight(mite1, mite2)
 
-saved_pop = np.load('gen0.npy')
+saved_pop = np.load('best-mites-1.npy')
+# top_mite_inds = []
 
-for mite in saved_pop:
+for i in range(saved_pop.shape[0]):
+	mite = saved_pop[i, :]
 	print mite
-	print basicFight(mite, mite1)
+	curScore = basicFight(mite, threes)[0]
+	print curScore
+
+	# if curScore >= 10:
+	# 	top_mite_inds.append(i)
+
+# best_pop = saved_pop[top_mite_inds, :]
+# print "Currently the best population is: "
+# print best_pop
+# np.save('best-mites-1.npy', best_pop)
 	
 
 
