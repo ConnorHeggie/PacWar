@@ -1,15 +1,16 @@
 import numpy as np
-from scoring import oneThreeScoring, populationVersusMiteFight, roundRobinScore, popVersusPopFight
+from scoring import oneThreeScoring, populationVersusMiteFight, roundRobinScore, popVersusPopFight, fromFilePopScoring
 from miteManagement import uniformRandMite, getNeighbors, getGeneNeighbors
 
 # This function will generate a random mite and then run it through basic hill climbing with the provided
 # scoring function
-def hillClimbedMite(scoreFunc=oneThreeScoring,seed=None):
+def hillClimbedMite(scoreFunc=fromFilePopScoring,seed=None):
     return miteBasicHillClimb(uniformRandMite(seed), scoreFunc=scoreFunc)
 
 
 # This function will generated a hill climbed population
-def hillClimbedPop(popSize, scoreFunc=oneThreeScoring,seed=None):
+def hillClimbedPop(popSize, scoreFunc=fromFilePopScoring,seed=None):
+    print "Generating random hill climbed population"
     pop = np.zeros((popSize, 50))
 
     for i in range(popSize):
@@ -28,7 +29,7 @@ def miteBasicHillClimb(startMite, neighborFunc = getNeighbors, scoreFunc = oneTh
     while 1:
         neighbors = neighborFunc(curMite)
         scores = scoreFunc(np.vstack((curMite, neighbors)))
-
+        curScore = scores[0]
         # Check to see if the best value is unique
         sortedScoreInds = np.array(np.argsort(scores, axis=0))
 
@@ -45,13 +46,14 @@ def miteBasicHillClimb(startMite, neighborFunc = getNeighbors, scoreFunc = oneTh
 
             bestMite = newMite
 
-            plateauCounter += 1
-
-            if plateauCounter > 10:
-                return curMite
+            if scores[sortedScoreInds[-1]] == curScore:
+                plateauCounter += 1
+                if plateauCounter > 10:
+                    return curMite
 
         # If best mite is the current mite, return it
         if bestMite == 0:
+            print "Ending hill climber, best mite is: " + str(curMite)
             return curMite
 
         else:

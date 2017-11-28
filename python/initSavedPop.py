@@ -27,7 +27,7 @@ def main():
 
         np.save('savedPop' + str(popSize) + '.npy', pop)
     else:
-        pop = np.load('savedPop.npy')
+        pop = np.load('savedPop' + str(popSize) + '.npy')
         popSize = pop.shape[0]
 
     args = []
