@@ -15,6 +15,8 @@ while True:
 	print initPop
 	
 	newPop = totalPopCrossOver(initPop)
+	for i in range(newPop.shape[0]):
+		newPop[i, :] = miteSelfByGeneClimb(newPop[i, :])
 	newPopSize = newPop.shape[0]
 	filteredPop = np.zeros((0, 50))
 	fileScores = fromFilePopScoring(newPop)
