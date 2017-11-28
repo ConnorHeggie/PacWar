@@ -5,30 +5,30 @@ from miteManagement import uniformRandMite, getNeighbors, getGeneNeighbors
 # This function will generate a random mite and then run it through basic hill climbing with the provided
 # scoring function
 def hillClimbedMite(fileName="savedPop.npy",seed=None):
-    return miteBasicHillClimb(uniformRandMite(seed), scoreFunc=scoreFunc)
+    return miteBasicHillClimb(uniformRandMite(seed), fileName=fileName)
 
 
 # This function will generated a hill climbed population
-def hillClimbedPop(popSize, scoreFunc=fromFilePopScoring,seed=None):
+def hillClimbedPop(popSize, fileName="savedPop.npy",seed=None):
     print "Generating random hill climbed population"
     pop = np.zeros((popSize, 50))
 
     for i in range(popSize):
         print "Start hill climber for mite creation: " + str(i+1) + " / " + str(popSize)
-        pop[i, :] = hillClimbedMite(scoreFunc, seed)
+        pop[i, :] = hillClimbedMite(fileName=fileName, seed=seed)
 
     return pop
 
 
 # This function will take in a mite, a function to get neighbors, and a scoring function
 # It will perform hill climbing and return the locally optimum mite (all neighbors are worse scores)
-def miteBasicHillClimb(startMite, neighborFunc = getNeighbors, scoreFunc = oneThreeScoring):
+def miteBasicHillClimb(startMite, neighborFunc = getNeighbors, fileName="savedPop.npy"):
     curMite = np.copy(np.reshape(startMite, (1, 50)))
     plateauCounter = 0
 
     while 1:
         neighbors = neighborFunc(curMite)
-        scores = scoreFunc(np.vstack((curMite, neighbors)))
+        scores = fromFilePopScoring(np.vstack((curMite, neighbors)), savedMitesFile=fileName)
         curScore = scores[0]
         # Check to see if the best value is unique
         sortedScoreInds = np.array(np.argsort(scores, axis=0))
