@@ -126,5 +126,10 @@ def main():
     print "Round robin scoring of ones, twos, and threes produced: \n" + str(scores)
     print "Population fight between threes and a pop of ones and twos produces: \n" + str(scores2)
 
+    savedPop = np.load('savedPop30.npy')
+    rrScores = roundRobinScore(savedPop)
+
+    print savedPop[np.argmax(rrScores, axis=0), :]
+
 
 if __name__ == "__main__": main()

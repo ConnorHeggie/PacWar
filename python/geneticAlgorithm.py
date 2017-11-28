@@ -3,6 +3,7 @@ from miteManagement import uniformRandPop
 from scoring import oneThreeScoring
 from hillClimb import hillClimbedPop
 
+
 # This function will take in 2 mites and randomly cross them over k times
 def basicCrossOver(mite1, mite2, k=1):
     randInds = list(np.sort(np.random.choice(len(mite1), size=(k), replace=False)))
@@ -79,6 +80,7 @@ def basicPopMutation(pop, mutationRate = .02):
         newPop[i, :] = basicMutation(pop[i, :], mutationRate)
 
     return newPop
+
 
 # This function will take a pop size, selection keep rate, number of generations, mutation func,
 # crossover function, initialize population function, and scoring function, perform a genetic algorithm,

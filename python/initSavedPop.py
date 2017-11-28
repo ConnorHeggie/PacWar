@@ -16,16 +16,16 @@ def processMite(args_tup):
 def main():
     popSize = 30
 
-    if 'savedPop.npy' not in os.listdir('./'):
+    if 'savedPop' + str(popSize) + '.npy' not in os.listdir('./'):
         print "Initializing to random...\n"
-        pop = uniformRandPop(popSize)
+        pop = np.vstack((np.ones((1,50)), np.ones((1,50)) * 3, uniformRandPop(popSize-2)))
 
         print "Starting hill climbing for each mite...\n"
         for i in range(popSize):
             pop[i, :] = miteBasicHillClimb(pop[i, :])
             print "Finished mite number " + str(i+1) + " of " + str(popSize)
 
-        np.save('savedPop.npy', pop)
+        np.save('savedPop' + str(popSize) + '.npy', pop)
     else:
         pop = np.load('savedPop.npy')
         popSize = pop.shape[0]
@@ -41,7 +41,7 @@ def main():
 
     pop = np.concatenate(tuple(results), axis=0)
 
-    np.save('savedPop.npy', pop)
+    np.save('savedPop' + str(popSize) + '.npy', pop)
 
     print "Saved the population!"
 
