@@ -8,7 +8,7 @@ f = open("genAlgOutput.txt", 'w')
 
 # This function will take in 2 mites and randomly cross them over k times
 def basicCrossOver(mite1, mite2, k=1, spliceSize=-1):
-    randInds = list(np.sort(np.random.choice(len(mite1), size=(k), replace=False)))
+    randInds = list(np.sort(np.random.choice(len(mite1) - 1, size=(k), replace=False)))
 
     newMite1 = np.copy(mite1)
     newMite2 = np.copy(mite2)
