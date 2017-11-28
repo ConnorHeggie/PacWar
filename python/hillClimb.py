@@ -91,7 +91,7 @@ def miteSelfHillClimb(startMite, neighborFunc = getNeighbors, stop_tol=1):
         curMite = np.copy(np.reshape(neighbors[bestMite, :], (1,50)))
 
 
-def miteSelfByGeneClimb(startMite, filename, stop_tol=3):
+def miteSelfByGeneClimb(startMite, stop_tol=3):
     curMite = np.copy(np.reshape(startMite, (1, 50)))
     pastMites = np.zeros((0,50))
 
@@ -134,8 +134,6 @@ def miteSelfByGeneClimb(startMite, filename, stop_tol=3):
             geneInd = (geneInd+1)%len(genes)
             continue
 
-    np.save(filename+'.npy', curMite)
-
     return curMite
 
 
@@ -149,7 +147,7 @@ def main():
     newMite = [int(x) for x in newMite.split()]
     newMite = np.array(newMite)
 
-    localBestMite2 = miteSelfByGeneClimb(ones, 'onesSelfClimbed')
+    localBestMite2 = miteSelfByGeneClimb(ones)
     print "Finished self climbing"
 
     print "Best mite found starting at the ones mite is: " + str(localBestMite1)
