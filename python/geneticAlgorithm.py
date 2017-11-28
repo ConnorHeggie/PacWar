@@ -3,7 +3,8 @@ from miteManagement import uniformRandPop
 from scoring import oneThreeScoring, fromFilePopScoring
 from hillClimb import hillClimbedPop, miteBasicHillClimb
 
-
+np.set_printoptions(threshold=np.nan)
+f = open("genAlgOutput.txt", 'w')
 
 # This function will take in 2 mites and randomly cross them over k times
 def basicCrossOver(mite1, mite2, k=1):
@@ -88,6 +89,10 @@ def basicPopMutation(pop, mutationRate = .02):
 # and then return the resulting population
 def genetic_algorithm(popSize=50, keepRate=0.3, mutationFunc=basicPopMutation, numGen=10, initPopFunc=uniformRandPop, crossOverFunc=basicPopCrossOver, scoreFunc=fromFilePopScoring):
     pop = initPopFunc(popSize)
+    print "intial population: "
+    print pop
+    f.write("inital population:\n")
+    f.write(pop)
     keepNum = int(np.ceil(keepRate*popSize))
     crossNum = popSize-keepNum
 
@@ -100,6 +105,11 @@ def genetic_algorithm(popSize=50, keepRate=0.3, mutationFunc=basicPopMutation, n
         scores = scoreFunc(pop)
 
         print "Average score for generation " + str(i+1) + " is " + str(np.mean(scores))
+        f.write("Average score for generation " + str(i+1) + " is " + str(np.mean(scores)) + "\n")
+        print "Generation " + str(i + 1) + " population:"
+        f.write("Generation " + str(i + 1) + " population:\n")
+        print pop
+        f.write("pop")
 
         newPop = np.zeros(pop.shape)
 

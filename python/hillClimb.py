@@ -1,15 +1,16 @@
 import numpy as np
-from scoring import oneThreeScoring
+from scoring import oneThreeScoring, fromFilePopScoring
 from miteManagement import uniformRandMite, getNeighbors
 
 # This function will generate a random mite and then run it through basic hill climbing with the provided
 # scoring function
-def hillClimbedMite(scoreFunc=oneThreeScoring,seed=None):
+def hillClimbedMite(scoreFunc=fromFilePopScoring,seed=None):
     return miteBasicHillClimb(uniformRandMite(seed), scoreFunc=scoreFunc)
 
 
 # This function will generated a hill climbed population
-def hillClimbedPop(popSize, scoreFunc=oneThreeScoring,seed=None):
+def hillClimbedPop(popSize, scoreFunc=fromFilePopScoring,seed=None):
+    print "Generating random hill climbed population"
     pop = np.zeros((popSize, 50))
 
     for i in range(popSize):
@@ -52,6 +53,7 @@ def miteBasicHillClimb(startMite, neighborFunc = getNeighbors, scoreFunc = oneTh
 
         # If best mite is the current mite, return it
         if bestMite == 0:
+            print "Ending hill climber, best mite is: " + str(curMite)
             return curMite
 
         else:
