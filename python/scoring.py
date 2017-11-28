@@ -47,7 +47,7 @@ def basicFight(mite1, mite2):
 
 # This function will take in a mite and a population
 # and return the average score of that mite battled against the population
-def populationFight(mite, population, scoreFunc = basicScoring):
+def populationFight(mite, population):
     numMites = population.shape[0]
     scoresSum = 0
 
@@ -55,6 +55,27 @@ def populationFight(mite, population, scoreFunc = basicScoring):
         scoresSum += basicFight(mite, population[i,:])[0]
 
     return float(scoresSum) / numMites
+
+def popVersusPopFight(pop1, pop2):
+    numMites = pop1.shape[0]
+    scores = np.zeros((numMites))
+
+    for i in range(numMites):
+        scores[i] += populationFight(pop1[i, :], pop2)
+
+    return scores / pop2.shape[0]
+
+
+# This function will take in a mite and a population
+# and return the  score of that population battled against the mite
+def populationVersusMiteFight(population, mite):
+    numMites = population.shape[0]
+    scores = np.zeros((numMites))
+
+    for i in range(numMites):
+        scores[i] = basicFight(mite, population[i,:])[1]
+
+    return scores
 
 
 # This function will take in a population (where each row is a mite) and return a column of scores for each mite

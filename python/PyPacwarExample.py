@@ -14,6 +14,4 @@ def main():
 	print "Ones PAC-mites remaining:", c1
 	print "Threes PAC-mites remaining:", c2
 
-
-
 if __name__ == "__main__": main()
