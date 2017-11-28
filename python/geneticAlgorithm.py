@@ -1,7 +1,8 @@
 import numpy as np
 from miteManagement import uniformRandPop
-from scoring import oneThreeScoring
-from hillClimb import hillClimbedPop
+from scoring import oneThreeScoring, fromFilePopScoring
+from hillClimb import hillClimbedPop, miteBasicHillClimb
+
 
 
 # This function will take in 2 mites and randomly cross them over k times
@@ -37,13 +38,13 @@ def basicPopCrossOver(pop, k=1, seed=None):
     randInds = np.random.choice(popSize, size=(popSize), replace=False)
 
     for i in range(0, popSize, 2):
-        mite1 = pop[i, :]
-        mite2 = pop[i+1, :]
+        mite1 = pop[randInds[i], :]
+        mite2 = pop[randInds[i+1], :]
 
         newMite1, newMite2 = basicCrossOver(mite1, mite2, k)
 
-        newPop[i, :] = newMite1
-        newPop[i+1, :] = newMite2
+        newPop[i, :] = miteBasicHillClimb(newMite1, scoreFunc=fromFilePopScoring)
+        newPop[i+1, :] = miteBasicHillClimb(newMite2, scoreFunc=fromFilePopScoring)
 
     return newPop
 
@@ -85,7 +86,7 @@ def basicPopMutation(pop, mutationRate = .02):
 # This function will take a pop size, selection keep rate, number of generations, mutation func,
 # crossover function, initialize population function, and scoring function, perform a genetic algorithm,
 # and then return the resulting population
-def genetic_algorithm(popSize=50, keepRate=.2, mutationFunc=basicPopMutation, numGen=10, initPopFunc=uniformRandPop, crossOverFunc=basicPopCrossOver, scoreFunc=oneThreeScoring):
+def genetic_algorithm(popSize=50, keepRate=0.3, mutationFunc=basicPopMutation, numGen=10, initPopFunc=uniformRandPop, crossOverFunc=basicPopCrossOver, scoreFunc=fromFilePopScoring):
     pop = initPopFunc(popSize)
     keepNum = int(np.ceil(keepRate*popSize))
     crossNum = popSize-keepNum
