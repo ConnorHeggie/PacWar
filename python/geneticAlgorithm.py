@@ -22,6 +22,9 @@ def basicCrossOver(mite1, mite2, k=1):
 
 # This function will take in a population and return a population of the same size
 # where the new population is a crossovered version of the original population
+
+# THIS FUNCTION DOES NOT SELECTIVELY BREED. IT JUST BREEDS THE ENTIRE POPULATION.
+# IT DOES NOT MODEL SURVIVAL OF THE FITTEST.
 def basicPopCrossOver(pop, k=1, seed=None):
     if seed != None:
         np.random.seed(seed)
@@ -29,6 +32,7 @@ def basicPopCrossOver(pop, k=1, seed=None):
     popSize = pop.shape[0]
     newPop = np.zeros(pop.shape)
 
+    # YOU DON"T USE THIS SO THE SAME MITES ARE ALWAYS BEING CROSSED.
     randInds = np.random.choice(popSize, size=(popSize), replace=False)
 
     for i in range(0, popSize, 2):
@@ -70,6 +74,7 @@ def basicPopMutation(pop, mutationRate = .02):
     popSize = pop.shape[0]
     newPop = np.copy(pop)
 
+    # CURRENTLY MUTATING ENTIRE POPULATION. MAYBE SELECTIVELY MUTATE
     for i in range(popSize):
         newPop[i, :] = basicMutation(pop[i, :], mutationRate)
 
@@ -120,4 +125,3 @@ def main():
 
 
 if __name__ == "__main__": main()
-

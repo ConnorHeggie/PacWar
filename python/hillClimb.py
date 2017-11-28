@@ -28,7 +28,7 @@ def miteBasicHillClimb(startMite, neighborFunc = getNeighbors, scoreFunc = oneTh
     while 1:
         neighbors = neighborFunc(curMite)
         scores = scoreFunc(np.vstack((curMite, neighbors)))
-
+        curScore = scores[0]
         # Check to see if the best value is unique
         sortedScoreInds = np.argsort(scores, axis=0)
 
@@ -45,10 +45,10 @@ def miteBasicHillClimb(startMite, neighborFunc = getNeighbors, scoreFunc = oneTh
 
             bestMite = newMite
 
-            plateauCounter += 1
-
-            if plateauCounter > 10:
-                return curMite
+            if scores[sortedScoreInds[-1]] == curScore:
+                plateauCounter += 1
+                if plateauCounter > 10:
+                    return curMite
 
         # If best mite is the current mite, return it
         if bestMite == 0:
