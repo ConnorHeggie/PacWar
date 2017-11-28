@@ -93,7 +93,9 @@ def miteSelfHillClimb(startMite, neighborFunc = getNeighbors, stop_tol=1):
 
 def miteSelfByGeneClimb(startMite, stop_tol=3):
     curMite = np.copy(np.reshape(startMite, (1, 50)))
+    curScore = 0
     pastMites = np.zeros((0,50))
+    pastMites = np.vstack((pastMites, curMite))
 
     genes = ['U', 'V', 'W', 'X', 'Y', 'Z']
     geneInd = 0
@@ -102,13 +104,12 @@ def miteSelfByGeneClimb(startMite, stop_tol=3):
 
     for _ in range(3*len(genes)):
         curGene = genes[geneInd]
-        pastMites = np.vstack((pastMites, curMite))
 
         neighbors = getGeneNeighbors(curMite, curGene)
 
         scores = popVersusPopFight(neighbors, pastMites)
 
-        if np.max(scores) <= stop_tol:
+        if np.max(scores) <= stop_tol or np.max(scores) < curScore:
             i = 0
             geneInd = (geneInd+1)%len(genes)
             continue
@@ -127,6 +128,9 @@ def miteSelfByGeneClimb(startMite, stop_tol=3):
         print "Cur best score: " + str(scores[bestMite]) + " optimizing for gene " + str(curGene)
 
         curMite = np.copy(np.reshape(neighbors[bestMite, :], (1,50)))
+        curScore = scores[bestMite]
+
+        pastMites = np.vstack((pastMites, curMite))
         i += 1
 
         if i >= maxIter:
