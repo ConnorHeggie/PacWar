@@ -7,20 +7,46 @@ np.set_printoptions(threshold=np.nan)
 f = open("genAlgOutput.txt", 'w')
 
 # This function will take in 2 mites and randomly cross them over k times
-def basicCrossOver(mite1, mite2, k=1):
+def basicCrossOver(mite1, mite2, k=1, spliceSize=-1):
     randInds = list(np.sort(np.random.choice(len(mite1), size=(k), replace=False)))
 
     newMite1 = np.copy(mite1)
     newMite2 = np.copy(mite2)
 
     for i in randInds:
-        temp1 = newMite1[i:]
-        temp2 = newMite2[i:]
+        if spliceSize == -1:
+            temp1 = newMite1[i:]
+            temp2 = newMite2[i:]
 
-        newMite1[i:] = temp2
-        newMite2[i:] = temp1
+            newMite1[i:] = temp2
+            newMite2[i:] = temp1
+        else:
+            if spliceSize == 0:
+                end = np.random.choice(np.array(range(i + 1, 50)))
+            else:
+                end = min(i + spliceSize + 1, 50)
+            temp1 = newMite1[i:end]
+            temp2 = newMite2[i:end]
+
+            newMite1[i:end] = temp2
+            newMite2[i:end] = temp1
 
     return newMite1, newMite2
+
+# This function will take a population and breed every mite in the population
+# with each other.
+def totalPopCrossOver(pop):
+    popSize = pop.shape[0]
+    newPop = np.copy(pop)
+    for i in range(popSize):
+        for j in range(i + 1, popSize):
+            mite1 = pop[i, :]
+            mite2 = pop[j, :]
+            newMite1, newMite2 = basicCrossOver(mite1, mite2, spliceSize=0)
+            newMite1 = miteBasicHillClimb(newMite1, scoreFunc=fromFilePopScoring)
+            newMite2 = miteBasicHillClimb(newMite2, scoreFunc=fromFilePopScoring)
+            newPop = np.vstack((newPop, newMite1, newMite2))
+    return newPop
 
 
 # This function will take in a population and return a population of the same size
@@ -42,7 +68,7 @@ def basicPopCrossOver(pop, k=1, seed=None):
         mite1 = pop[randInds[i], :]
         mite2 = pop[randInds[i+1], :]
 
-        newMite1, newMite2 = basicCrossOver(mite1, mite2, k)
+        newMite1, newMite2 = basicCrossOver(mite1, mite2, k, spliceSize=0)
 
         newPop[i, :] = miteBasicHillClimb(newMite1, scoreFunc=fromFilePopScoring)
         newPop[i+1, :] = miteBasicHillClimb(newMite2, scoreFunc=fromFilePopScoring)
