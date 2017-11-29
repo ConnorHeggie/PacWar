@@ -41,8 +41,8 @@ def fullGeneCrossover(mite1, mite2):
 
 # This function will take in 2 mites and randomly cross them over k times
 def basicCrossOver(mite1, mite2, k=1, spliceSize=-1):
-    randInds = list(np.sort(np.random.choice(len(mite1), size=(k), replace=False)))
-
+    randInds = list(np.sort(np.random.choice(49, size=(k), replace=False)))
+    print randInds
     newMite1 = np.copy(mite1)
     newMite2 = np.copy(mite2)
 
@@ -58,17 +58,19 @@ def basicCrossOver(mite1, mite2, k=1, spliceSize=-1):
                 end = np.random.choice(np.array(range(i + 1, 50)))
             else:
                 end = min(i + spliceSize + 1, 50)
-            temp1 = newMite1[i:end]
-            temp2 = newMite2[i:end]
+            temp1 = np.copy(newMite1[0, i:end])
+            temp2 = np.copy(newMite2[0, i:end])
 
-            newMite1[i:end] = temp2
-            newMite2[i:end] = temp1
+            newMite1[0, i:end] = temp2
+            newMite2[0, i:end] = temp1
+            print newMite1
+            print newMite2
 
     return newMite1, newMite2
 
 # This function will take a population and breed every mite in the population
 # with each other.
-def totalPopCrossOver(pop):
+def totalPopCrossOver(pop, hillClimb=True, fileName="savedPop.npy"):
     popSize = pop.shape[0]
     newPop = np.copy(pop)
     for i in range(popSize):
@@ -76,8 +78,9 @@ def totalPopCrossOver(pop):
             mite1 = pop[i, :]
             mite2 = pop[j, :]
             newMite1, newMite2 = basicCrossOver(mite1, mite2, spliceSize=0)
-            newMite1 = miteBasicHillClimb(newMite1, scoreFunc=fromFilePopScoring)
-            newMite2 = miteBasicHillClimb(newMite2, scoreFunc=fromFilePopScoring)
+            if hillClimb:
+                newMite1 = miteBasicHillClimb(newMite1, fileName=fileName)
+                newMite2 = miteBasicHillClimb(newMite2, fileName=fileName)
             newPop = np.vstack((newPop, newMite1, newMite2))
     return newPop
 
@@ -87,7 +90,7 @@ def totalPopCrossOver(pop):
 
 # THIS FUNCTION DOES NOT SELECTIVELY BREED. IT JUST BREEDS THE ENTIRE POPULATION.
 # IT DOES NOT MODEL SURVIVAL OF THE FITTEST.
-def basicPopCrossOver(pop, k=1, seed=None):
+def basicPopCrossOver(pop, k=1, seed=None, hillClimb=True, fileName="savedPop.npy"):
     if seed != None:
         np.random.seed(seed)
 
@@ -103,8 +106,12 @@ def basicPopCrossOver(pop, k=1, seed=None):
 
         newMite1, newMite2 = basicCrossOver(mite1, mite2, k, spliceSize=0)
 
-        newPop[i, :] = miteBasicHillClimb(newMite1, scoreFunc=fromFilePopScoring)
-        newPop[i+1, :] = miteBasicHillClimb(newMite2, scoreFunc=fromFilePopScoring)
+        if hillClimb:
+            newPop[i, :] = miteBasicHillClimb(newMite1, fileName=fileName)
+            newPop[i+1, :] = miteBasicHillClimb(newMite2, fileName=fileName)
+        else:
+            newPop[i, :] = newMite1
+            newPop[i + 1, :] = newMite2
 
     return newPop
 

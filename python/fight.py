@@ -1,5 +1,6 @@
 import numpy as np
-from scoring import basicFight
+from scoring import basicFight, popVersusPopFight, roundRobinScore
+from geneticAlgorithm import basicCrossOver
 
 np.set_printoptions(threshold=np.nan)
 
@@ -16,11 +17,37 @@ mite1 = np.array(mite1)
 
 # print basicFight(mite1, mite2)
 
-saved_pop = np.load('gen0.npy')
+saved_pop = np.load('./run2-pop6-hc/savedPop.npy')
+test_pop = np.load('./run3-pop100/savedPop.npy')
 
-for mite in saved_pop:
-	print mite
-	print basicFight(mite, mite1)
+all_mites = np.load('./run2-pop6-hc/gen0.npy')
+
+print basicCrossOver(ones, threes, spliceSize=0)
+
+# for i in range(1, 29):
+# 	all_mites = np.vstack((all_mites, np.load('./run2-pop6-hc/gen' + str(i) + ".npy")))
+# print roundRobinScore(all_mites)
+
+# print popVersusPopFight(saved_pop, test_pop)
+# print roundRobinScore(saved_pop)
+# print saved_pop[5, :].astype(np.uint8)
+
+
+# top_mite_inds = []
+
+# for i in range(test_pop.shape[0]):
+# 	mite = test_pop[i, :]
+# 	print mite
+# 	curScore = basicFight(mite, mite1)[0]
+# 	print curScore
+
+	# if curScore >= 10:
+	# 	top_mite_inds.append(i)
+
+# best_pop = saved_pop[top_mite_inds, :]
+# print "Currently the best population is: "
+# print best_pop
+# np.save('best-mites-1.npy', best_pop)
 	
 
 
