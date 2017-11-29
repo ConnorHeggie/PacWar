@@ -6,6 +6,38 @@ from hillClimb import hillClimbedPop, miteBasicHillClimb
 np.set_printoptions(threshold=np.nan)
 f = open("genAlgOutput.txt", 'w')
 
+# This function will take 2 populations and cross over randomly within each gene
+def randomGenePopCrossOver(pop):
+    popSize = pop.shape[0]
+    newPop = np.copy(pop)
+    for i in range(popSize):
+        for j in range(i + 1, popSize):
+            mite1 = pop[i, :]
+            mite2 = pop[j, :]
+            newMite1, newMite2 = randomGeneCrossover(mite1, mite2)
+            newPop = np.vstack((newPop, newMite1, newMite2))
+    return newPop
+
+
+def randomGeneCrossOver(mite1, mite2):
+    newMite1 = np.copy(mite1)
+    newMite2 = np.copy(mite2)
+
+    geneInds = np.array([(0, 4), (4, 20), (20, 23), (23, 26), (26, 38), (38, 50)])
+    numCrosses = np.random.randint(0, 7)
+    crossGenes = np.random.choice(range(6), size=numCrosses, replace=False)
+
+    for i in range(numCrosses):
+        curRange = geneInds[crossGenes[i], :]
+
+        crossInds = (curRange[0], np.random.randint(curRange[0]+1, curRange[1]))
+
+        newMite1[0, crossInds[0]:crossInds[1]] = mite2[0, crossInds[0]:crossInds[1]]
+        newMite2[0, crossInds[0]:crossInds[1]] = mite1[0, crossInds[0]:crossInds[1]]
+
+    return newMite1, newMite2
+
+
 # This function will take 2 populations and cross over up to 3 random full genes between mite pairs
 def fullGenePopCrossOver(pop):
     popSize = pop.shape[0]
@@ -20,7 +52,7 @@ def fullGenePopCrossOver(pop):
 
 
 # This function will take in 2 mites and randomly cross over up to 3 full genes
-def fullGeneCrossover(mite1, mite2):
+def fullGeneCrossOver(mite1, mite2):
     newMite1 = np.copy(mite1)
     newMite2 = np.copy(mite2)
 
@@ -32,11 +64,10 @@ def fullGeneCrossover(mite1, mite2):
     # print(crossInds)
 
     for i in range(numCrosses):
-        newMite1[0, crossInds[0]:crossInds[1]] = mite2[0, crossInds[0]:crossInds[1]]
-        newMite2[0, crossInds[0]:crossInds[1]] = mite1[0, crossInds[0]:crossInds[1]]
+        newMite1[0, crossInds[i, 0]:crossInds[i, 1]] = mite2[0, crossInds[i, 0]:crossInds[i, 1]]
+        newMite2[0, crossInds[i, 0]:crossInds[i, 1]] = mite1[0, crossInds[i, 0]:crossInds[i, 1]]
 
     return newMite1, newMite2
-
 
 
 # This function will take in 2 mites and randomly cross them over k times
@@ -204,7 +235,8 @@ def main():
     ones = np.ones((1,50))
     threes = np.copy(ones) * 3
 
-    print "Full gene crossover: " + fullGeneCrossover(ones, threes)
+    print "Full gene crossover: " + str(fullGeneCrossOver(ones, threes))
+    print "Random gene crossover: " + str(randomGeneCrossOver(ones, threes))
 
 
 if __name__ == "__main__": main()
