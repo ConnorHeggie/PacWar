@@ -7,21 +7,26 @@ np.set_printoptions(threshold=np.nan)
 f = open("genAlgOutput.txt", 'w')
 
 # This function will take 2 populations and cross over randomly within each gene
-def randomGenePopCrossOver(pop):
+def randomGenePopCrossOver(pop, hillClimb=True, fileName="savedPop.npy"):
     popSize = pop.shape[0]
     newPop = np.copy(pop)
     for i in range(popSize):
         for j in range(i + 1, popSize):
             mite1 = pop[i, :]
             mite2 = pop[j, :]
-            newMite1, newMite2 = randomGeneCrossover(mite1, mite2)
-            newPop = np.vstack((newPop, newMite1, newMite2))
+            newMite1, newMite2 = randomGeneCrossOver(mite1, mite2)
+            if hillClimb:
+                newPop = np.vstack((newPop, miteBasicHillClimb(newMite1, fileName=fileName), miteBasicHillClimb(newMite2, fileName=fileName)))
+            else:
+                newPop = np.vstack((newPop, newMite1, newMite2))
     return newPop
 
 
 def randomGeneCrossOver(mite1, mite2):
-    newMite1 = np.copy(mite1)
-    newMite2 = np.copy(mite2)
+    mite1 = np.reshape(np.copy(mite1), (1, 50))
+    mite2 = np.reshape(np.copy(mite2), (1, 50))
+    newMite1 = np.reshape(np.copy(mite1), (1, 50))
+    newMite2 = np.reshape(np.copy(mite2), (1, 50))
 
     geneInds = np.array([(0, 4), (4, 20), (20, 23), (23, 26), (26, 38), (38, 50)])
     numCrosses = np.random.randint(0, 7)

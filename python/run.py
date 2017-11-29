@@ -1,6 +1,6 @@
 import numpy as np
 from scoring import basicFight, fromFilePopScoring
-from geneticAlgorithm import basicPopCrossOver, totalPopCrossOver, fullGenePopCrossover, basicPopMutation
+from geneticAlgorithm import basicPopCrossOver, totalPopCrossOver, fullGenePopCrossOver, basicPopMutation, randomGenePopCrossOver
 from hillClimb import miteSelfByGeneClimb
 import sys
 
@@ -11,6 +11,7 @@ print sys.argv
 runDir = './run-X/'
 populationSize = 6
 hillClimb = False
+fullCrossOver = False
 
 if len(sys.argv) > 1 and sys.argv[1] == "climb":
 	hillClimb = True
@@ -24,6 +25,9 @@ if len(sys.argv) > 2:
 if len(sys.argv) > 3:
 	runDir = sys.argv[3]
 
+if len(sys.argv) > 4 and sys.argv[4] == "full":
+	fullCrossOver = True
+
 ones = np.ones((1,50))
 threes = np.ones((1,50)) * 3
 
@@ -32,8 +36,11 @@ gen = 1
 while True:
 	print "gen " + str(gen - 1)
 	print initPop
-	
-	newPop = fullGenePopCrossover(initPop, hillClimb=hillClimb, fileName=runDir + 'savedPop.npy')
+
+	if fullCrossOver:
+		newPop = fullGenePopCrossOver(initPop, hillClimb=hillClimb, fileName=runDir + 'savedPop.npy')
+	else:
+		newPop = randomGenePopCrossOver(initPop, hillClimb=hillClimb, fileName=runDir + 'savedPop.npy')
 	newPop = basicPopMutation(newPop)
 	if hillClimb:
 		for i in range(newPop.shape[0]):
