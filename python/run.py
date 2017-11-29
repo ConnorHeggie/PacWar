@@ -1,6 +1,6 @@
 import numpy as np
 from scoring import basicFight, fromFilePopScoring
-from geneticAlgorithm import basicPopCrossOver, totalPopCrossOver
+from geneticAlgorithm import basicPopCrossOver, totalPopCrossOver, fullGenePopCrossover, basicPopMutation
 from hillClimb import miteSelfByGeneClimb
 import sys
 
@@ -33,7 +33,8 @@ while True:
 	print "gen " + str(gen - 1)
 	print initPop
 	
-	newPop = totalPopCrossOver(initPop, hillClimb=hillClimb, fileName=runDir + 'savedPop.npy')
+	newPop = fullGenePopCrossover(initPop, hillClimb=hillClimb, fileName=runDir + 'savedPop.npy')
+	newPop = basicPopMutation(newPop)
 	if hillClimb:
 		for i in range(newPop.shape[0]):
 			newPop[i, :] = miteSelfByGeneClimb(newPop[i, :])
