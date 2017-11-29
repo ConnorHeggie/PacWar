@@ -6,6 +6,39 @@ from hillClimb import hillClimbedPop, miteBasicHillClimb
 np.set_printoptions(threshold=np.nan)
 f = open("genAlgOutput.txt", 'w')
 
+# This function will take 2 populations and cross over up to 3 random full genes between mite pairs
+def fullGenePopCrossOver(pop):
+    popSize = pop.shape[0]
+    newPop = np.copy(pop)
+    for i in range(popSize):
+        for j in range(i + 1, popSize):
+            mite1 = pop[i, :]
+            mite2 = pop[j, :]
+            newMite1, newMite2 = fullGeneCrossover(mite1, mite2)
+            newPop = np.vstack((newPop, newMite1, newMite2))
+    return newPop
+
+
+# This function will take in 2 mites and randomly cross over up to 3 full genes
+def fullGeneCrossover(mite1, mite2):
+    newMite1 = np.copy(mite1)
+    newMite2 = np.copy(mite2)
+
+    geneInds = np.array([(0, 4), (4, 20), (20, 23), (23, 26), (26, 38), (38, 50)])
+    numCrosses = np.random.randint(1, 4)
+    crossGenes = np.random.choice(range(6), size=numCrosses, replace=False)
+    crossInds = geneInds[crossGenes, :]
+
+    # print(crossInds)
+
+    for i in range(numCrosses):
+        newMite1[0, crossInds[0]:crossInds[1]] = mite2[0, crossInds[0]:crossInds[1]]
+        newMite2[0, crossInds[0]:crossInds[1]] = mite1[0, crossInds[0]:crossInds[1]]
+
+    return newMite1, newMite2
+
+
+
 # This function will take in 2 mites and randomly cross them over k times
 def basicCrossOver(mite1, mite2, k=1, spliceSize=-1):
     randInds = list(np.sort(np.random.choice(len(mite1), size=(k), replace=False)))
@@ -157,10 +190,14 @@ def genetic_algorithm(popSize=50, keepRate=0.3, mutationFunc=basicPopMutation, n
 
 
 def main():
-    pop = genetic_algorithm(popSize=50, numGen=250, initPopFunc=hillClimbedPop)
+    # pop = genetic_algorithm(popSize=50, numGen=250, initPopFunc=hillClimbedPop)
 
-    print(pop)
+    # print(pop)
 
+    ones = np.ones((1,50))
+    threes = np.copy(ones) * 3
+
+    print "Full gene crossover: " + fullGeneCrossover(ones, threes)
 
 
 if __name__ == "__main__": main()
