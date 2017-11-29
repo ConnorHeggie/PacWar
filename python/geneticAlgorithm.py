@@ -39,7 +39,7 @@ def randomGeneCrossOver(mite1, mite2):
 
 
 # This function will take 2 populations and cross over up to 3 random full genes between mite pairs
-def fullGenePopCrossOver(pop):
+def fullGenePopCrossOver(pop, hillClimb=True, fileName="savedPop.npy"):
     popSize = pop.shape[0]
     newPop = np.copy(pop)
     for i in range(popSize):
@@ -47,7 +47,10 @@ def fullGenePopCrossOver(pop):
             mite1 = pop[i, :]
             mite2 = pop[j, :]
             newMite1, newMite2 = fullGeneCrossover(mite1, mite2)
-            newPop = np.vstack((newPop, newMite1, newMite2))
+            if hillClimb:
+                newPop = np.vstack((newPop, miteBasicHillClimb(newMite1, fileName=fileName), miteBasicHillClimb(newMite2, fileName=fileName)))
+            else:
+                newPop = np.vstack((newPop, newMite1, newMite2))
     return newPop
 
 

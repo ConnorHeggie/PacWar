@@ -22,11 +22,22 @@ test_pop = np.load('./run3-pop100/savedPop.npy')
 
 all_mites = np.load('./run2-pop6-hc/gen0.npy')
 
-print basicCrossOver(ones, threes, spliceSize=0)
 
-# for i in range(1, 29):
-# 	all_mites = np.vstack((all_mites, np.load('./run2-pop6-hc/gen' + str(i) + ".npy")))
-# print roundRobinScore(all_mites)
+for i in range(1, 29):
+	all_mites = np.vstack((all_mites, np.load('./run2-pop6-hc/gen' + str(i) + ".npy")))
+scores = roundRobinScore(all_mites)
+score_pairs = []
+
+for i in range(all_mites.shape[0]):
+	mite = all_mites[i, :].astype(np.unint8)
+	score = scores[i][0]
+	score_pairs.append((mite, score))
+score_pairs.sort(key=lambda tup: tup[1], reverse=True)
+
+best_mites = score_pairs[0][0]
+for i in range(1, 10):
+	best_mites = np.vstack((best_mites, score_pairs[i][0]))
+print best_mites
 
 # print popVersusPopFight(saved_pop, test_pop)
 # print roundRobinScore(saved_pop)
