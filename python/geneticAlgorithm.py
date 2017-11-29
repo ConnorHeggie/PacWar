@@ -51,7 +51,7 @@ def fullGenePopCrossOver(pop, hillClimb=True, fileName="savedPop.npy"):
         for j in range(i + 1, popSize):
             mite1 = pop[i, :]
             mite2 = pop[j, :]
-            newMite1, newMite2 = fullGeneCrossover(mite1, mite2)
+            newMite1, newMite2 = fullGeneCrossOver(mite1, mite2)
             if hillClimb:
                 newPop = np.vstack((newPop, miteBasicHillClimb(newMite1, fileName=fileName), miteBasicHillClimb(newMite2, fileName=fileName)))
             else:
@@ -72,8 +72,8 @@ def fullGeneCrossOver(mite1, mite2):
     # print(crossInds)
 
     for i in range(numCrosses):
-        newMite1[0, crossInds[i, 0]:crossInds[i, 1]] = mite2[0, crossInds[i, 0]:crossInds[i, 1]]
-        newMite2[0, crossInds[i, 0]:crossInds[i, 1]] = mite1[0, crossInds[i, 0]:crossInds[i, 1]]
+        newMite1[crossInds[i][0]:crossInds[i][1]] = mite2[crossInds[i][0]:crossInds[i][1]]
+        newMite2[crossInds[i][0]:crossInds[i][1]] = mite1[crossInds[i][0]:crossInds[i][1]]
 
     return newMite1, newMite2
 
