@@ -23,6 +23,8 @@ def basicScoring(rounds,c1,c2):
             return 18, 2
         else:
             return 17, 3
+    elif c2 ==0 and c1 ==0:
+        return 10, 10
     elif float(c1/c2) >= 10:
         return 13, 7
     elif float(c2/c1) >= 10:
@@ -42,6 +44,11 @@ def basicScoring(rounds,c1,c2):
 # This function will take in two mites and return the scores of each found from a battle and basic score
 def basicFight(mite1, mite2):
     (rounds, c1, c2) = _PyPacwar.battle(list(mite1), list(mite2))
+    if c1==0 and c2==0:
+        print 'BAD MITES:'
+        print mite1
+        print mite2
+        print (rounds, c1, c2)
     return basicScoring(rounds, c1, c2)
 
 
@@ -63,7 +70,7 @@ def popVersusPopFight(pop1, pop2):
     for i in range(numMites):
         scores[i] += populationFight(pop1[i, :], pop2)
 
-    return scores / pop2.shape[0]
+    return scores
 
 
 # This function will take in a mite and a population
@@ -96,7 +103,7 @@ def roundRobinScore(population, scoreFunc = basicScoring):
             scores[i, 0] += iScore
             scores[j, 0] += jScore
 
-    return scores
+    return scores / (numMites - 1)
 
 
 # This function will take in a population (where each row is a mite) and return a column of scores for each mite
